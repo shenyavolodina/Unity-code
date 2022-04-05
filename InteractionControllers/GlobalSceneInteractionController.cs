@@ -4,29 +4,23 @@ using UnityEngine;
 
 namespace UnityIC
 {
-    public class GlobalSceneInteractionController : MonoBehaviour
-    {
-        public InteractiveObject[] interactiveObjects = null;
-
-        public static bool isGlobalLockInteractive = false;
-
-        public void DisableSceneInteraction()
+     public class GlobalSceneInteractionController : MonoBehaviour
         {
+            public static bool isGlobalLockInteractive = false;
 
-            for (int i = 0; i < interactiveObjects.Length; i++)
+            public static event Action OnEnableSceneInteraction = null;
+            public static event Action OnDisableSceneInteraction = null;
+
+            public void DisableSceneInteraction()
             {
-                interactiveObjects[i].SetInteractive(false);
+                OnDisableSceneInteraction?.Invoke();
+                isGlobalLockInteractive = true;
             }
-            isGlobalLockInteractive = true;
-        }
 
-        public void EnableSceneInteraction()
-        {
-            isGlobalLockInteractive = false;
-            for (int i = 0; i < interactiveObjects.Length; i++)
+            public void EnableSceneInteraction()
             {
-                interactiveObjects[i].SetInteractive(true);
+                isGlobalLockInteractive = false;
+                OnEnableSceneInteraction?.Invoke();
             }
         }
-    }
 }
